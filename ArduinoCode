@@ -1,0 +1,57 @@
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_ADXL345_U.h>
+#include <Adafruit_MPU6050.h>
+
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified();
+Adafruit_MPU6050 mpu;
+int i;
+//float X[1000][2];
+
+void setup(void) 
+{
+   Serial.begin(57600);  
+
+   if(!accel.begin())
+   {
+      Serial.println("No ADXL345 sensor detected.");
+      while(1);
+   }
+   if (!mpu.begin()) {
+    Serial.println("Failed to find MPU6050 chip");
+    while (1) {
+      delay(1);
+    }
+  }
+}
+
+void loop(void) 
+{
+   sensors_event_t event, event2,temp1,temp2; 
+   accel.getEvent(&event);
+   mpu.getEvent(&event2,&temp1,&temp2);
+   
+   //X[i][0]=event.acceleration.x;
+   //X[i][1]=event.acceleration.y;
+   //X[i][0]=event.acceleration.z;
+   //X[i][3]=event2.acceleration.x;
+   //X[i][4]=event2.acceleration.y;
+   //X[i][1]=event2.acceleration.z;
+   //X[i][2]=millis();
+
+   //Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
+   //Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
+   Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");
+   //Serial.print("X2: "); Serial.print(event2.acceleration.x); Serial.print("  ");
+   //Serial.print("Y2: "); Serial.print(event2.acceleration.y); Serial.print("  ");
+   Serial.print("Z2: "); Serial.print(event2.acceleration.z); Serial.print("  ");
+   //Serial.print("Z1: "); Serial.print(X[i][0]); Serial.print("  ");
+   //Serial.print("Z2: "); Serial.print(X[i][1]); Serial.print("  ");
+   //Serial.print("t: "); Serial.print(X[i][2]); Serial.print("  ");
+   Serial.println("m/s^2 ");
+   delay(1);
+   i++;
+   if (i > 999) {
+    i=0;    
+   }
+}
